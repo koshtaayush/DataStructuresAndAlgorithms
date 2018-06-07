@@ -1,0 +1,163 @@
+//Program for Kruksal's algorithm to find Minimum Spanning Tree
+// of given connected
+// weighted graph
+
+//Class to represent edge
+class Edge {
+    // constructor
+    constructor() {
+        this.src = null;
+        this.dest = null;
+        this.weight = null
+    }
+}
+
+//Class to represent subset for union-find
+class Subset {
+    constructor() {
+        this.parent = null;
+        this.rank = null
+    }
+}
+
+//Class for graph
+class Graph {
+
+    //constructor
+    //It initializes V vertices , E edges
+    //Each edge will have source, destination and weight
+    constructor(V, e) {
+        this.V = V;
+        this.E = e;
+        this.edge = [];
+
+        for (var i = 0; i < e; ++i) {
+            this.edge[i] = new Edge();
+        }
+    }
+
+    //Function to find the parent of the set of the element
+    //Uses Path compression technique
+    find(subsets, i) {
+
+        // find root and make root as parent of i (path compression)
+        if (subsets[i].parent != i) {
+            subsets[i].parent = this.find(subsets, subsets[i].parent);
+        }
+
+        return subsets[i].parent;
+    }
+
+    //Function for union of two sets x and y
+    //Uses union by rank
+    union(subsets, x, y) {
+        var xset = this.find(subsets, x);
+        var yset = this.find(subsets, y);
+
+        //Higher rank tree will be parent of the lower rank tree
+        //If the ranks are same make one as a root and increment the rank
+        if (subsets[xset].parent < subsets[yset].rank) {
+            subsets[xset].parent = yset;
+        } else if (subsets[xset].parent > subsets[yset].rank) {
+            subsets[yset].parent = xset;
+        } else {
+            subsets[yset].parent = xset;
+            subsets[xset].rank++;
+        }
+    }
+
+    KruskalMST() {
+
+        //This will store the edges of the MST formed
+        var result = [];
+
+        //Index variable for result
+        var e = 0;
+
+        for (var i = 0; i < V; ++i) {
+            result[i] = new Edge();
+        }
+
+        //Function to sort the edges based on weight in non-decreasing order
+        this.edge.sort(function (a, b) {
+            return a.weight - b.weight;
+        });
+
+        //Creating subsets
+        var subsets = [];
+
+        for (var j = 0; j < V; ++j) {
+            subsets[j] = new Subset();
+            subsets[j].parent = j;
+            subsets[j].rank = 0;
+        }
+
+        //Index used to pick up next edge
+        var i = 0;
+
+        while (e < V - 1) {
+
+            var next_edge = new Edge();
+            next_edge = this.edge[i++];
+
+            var x = this.find(subsets, next_edge.src);
+            var y = this.find(subsets, next_edge.dest);
+
+            if (x != y) {
+                result[e++] = next_edge;
+                this.union(subsets, x, y);
+            }
+        }
+
+        console.log("Following are the edges in the constructed MST");
+
+        for (i = 0; i < e; i++) {
+            console.log(result[i].src + " -- " + result[i].dest + " == " + result[i].weight);
+        }
+    }
+}
+
+var V = 4;
+var E = 5;
+
+/* 
+Let us create following weighted graph
+                10
+           0--------1
+           |  \     |
+          6|   5\   |15
+           |      \ |
+           2--------3
+               4       
+*/
+
+var g = new Graph(V, E);
+
+g.edge[0].src = 0;
+g.edge[0].dest = 1;
+g.edge[0].weight = 10;
+
+
+g.edge[1].src = 0;
+g.edge[1].dest = 2;
+g.edge[1].weight = 6;
+
+
+g.edge[2].src = 0;
+g.edge[2].dest = 3;
+g.edge[2].weight = 5;
+
+
+g.edge[3].src = 1;
+g.edge[3].dest = 3;
+g.edge[3].weight = 15;
+
+g.edge[4].src = 2;
+g.edge[4].dest = 3;
+g.edge[4].weight = 4;
+
+//Following are the edges in the constructed MST
+//2 -- 3 == 4
+//0 -- 3 == 5
+//0 -- 1 == 10
+g.KruskalMST();

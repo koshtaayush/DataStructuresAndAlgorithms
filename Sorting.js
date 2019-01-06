@@ -1,6 +1,6 @@
 Sorting	      Worst 	  Average	    Best
 ---------------------------------------------
-Bubble 	      N2	      N2	        N
+Bubble 	      N2        N2          N
 Insetion      N2        N2          N
 Heap          nlogn     nlogn       nlogn
 Merge         nlogn     nlogn       nlogn

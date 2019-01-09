@@ -1,2 +1,2 @@
 # DataStructuresAndAlgorithms
-contains the implementation of commonly used data structure and algorithms
+Contains the implementation of commonly used data structure and algorithms

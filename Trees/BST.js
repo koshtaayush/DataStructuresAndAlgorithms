@@ -108,6 +108,14 @@ BST.insert(5);
 BST.insert(9);
 BST.insert(27);
 
+//          15 
+//         /  \ 
+//        10   25 
+//       / \   / \ 
+//      7  13 22  27 
+//     / \    / 
+//    5   9  17  
+
 console.log("inorder traversal");
 // 5 7 9 10 13 15 17 22 25 27
 var root = BST.getRootNode(); 

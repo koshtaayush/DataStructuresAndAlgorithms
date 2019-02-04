@@ -95,14 +95,19 @@ class Graph {
         //Index used to pick up next edge
         var i = 0;
 
+        //In MST the number of edges should be equal to n-1, where n is equal to number of vertices
         while (e < V - 1) {
-
+            
+            //Edge will contain properties of src, dest and weight
             var next_edge = new Edge();
             next_edge = this.edge[i++];
 
+            //For both src and dest, finding the set where they belong
+            //subsets will contain parent and rank for each vertex
             var x = this.find(subsets, next_edge.src);
             var y = this.find(subsets, next_edge.dest);
 
+            //If the x and y are from different subsets, do a union
             if (x != y) {
                 result[e++] = next_edge;
                 this.union(subsets, x, y);
